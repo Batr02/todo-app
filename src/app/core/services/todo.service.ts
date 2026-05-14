@@ -19,7 +19,7 @@ export class TodoService {
   private loadingSubject = new BehaviorSubject<boolean>(false);
   loading$ = this.loadingSubject.asObservable();
 
-   loadTodos(): void {
+  loadTodos(): void {
     this.loadingSubject.next(true);
     this.http
       .get<Todo[]>(`${this.API}?userId=${this.USER_ID}&_limit=10`)
@@ -32,7 +32,7 @@ export class TodoService {
       });
   }
 
-    addTodo(title: string): Observable<Todo> {
+  addTodo(title: string): Observable<Todo> { 
     const dto: CreateTodoDto = {
       title,
       completed: false,
@@ -47,4 +47,24 @@ export class TodoService {
     );
   }
 
+  toggleTodo(todo: Todo): Observable<Todo> {
+    const updated = { ...todo, completed: !todo.completed };
+    return this.http.put<Todo>(`${this.API}/${todo.id}`, updated).pipe(
+      tap(() => {
+        const todos = this.todosSubject.getValue().map((t) =>
+          t.id === todo.id ? updated : t
+        );
+        this.todosSubject.next(todos);
+      })
+    );
+  }
+
+  deleteTodo(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API}/${id}`).pipe(
+      tap(() => {
+        const todos = this.todosSubject.getValue().filter((t) => t.id !== id);
+        this.todosSubject.next(todos);
+      })
+    );
+  }
 }
