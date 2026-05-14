@@ -1,0 +1,21 @@
+<div class="todo-item" [class.completed]="todo.completed">
+  <mat-checkbox
+    [checked]="todo.completed"
+    [disabled]="loading"
+    (change)="toggle.emit(todo)"
+    color="primary"
+  />
+
+  <span class="todo-title">{{ todo.title }}</span>
+
+  <button
+    mat-icon-button
+    color="warn"
+    [disabled]="loading"
+    (click)="delete.emit(todo.id)"
+    matTooltip="Удалить задачу"
+    class="delete-btn"
+  >
+    <mat-icon>delete_outline</mat-icon>
+  </button>
+</div>
