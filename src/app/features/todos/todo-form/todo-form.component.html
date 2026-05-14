@@ -1,0 +1,28 @@
+<div class="todo-form">
+  <mat-form-field appearance="outline" class="todo-input">
+    <mat-label>New task</mat-label>
+    <input
+      matInput
+      [formControl]="titleControl"
+      placeholder="What needs to be done?"
+      (keyup.enter)="submit()"
+    />
+    <mat-hint>Press Enter or click the button to add</mat-hint>
+    @if (titleControl.hasError('minlength')) {
+      <mat-error>Minimum 3 characters</mat-error>
+    }
+    @if (titleControl.hasError('maxlength')) {
+      <mat-error>Maximum 100 characters</mat-error>
+    }
+  </mat-form-field>
+
+  <button
+    mat-fab
+    color="primary"
+    [disabled]="titleControl.invalid"
+    (click)="submit()"
+    aria-label="Add task"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
