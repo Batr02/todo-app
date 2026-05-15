@@ -52,23 +52,30 @@ export class TodoListComponent {
 
   onAdd(title: string): void {
     this.todoService.addTodo(title).subscribe({
-      next: () => this.notify('✅ Task added'),
-      error: () => this.notify('❌ Error adding task', true),
+      next: () => this.notify('Task added'),
+      error: () => this.notify('Error adding task', true),
     });
   }
 
   onToggle(todo: Todo): void {
     this.todoService.toggleTodo(todo).subscribe({
-      error: () => this.notify('❌ Error updating task', true),
+      error: () => this.notify('Error updating task', true),
     });
   }
 
   onDelete(id: number): void {
     this.todoService.deleteTodo(id).subscribe({
-      next: () => this.notify('🗑️ Task deleted'),
-      error: () => this.notify('❌ Error deleting task', true),
+      next: () => this.notify('Task deleted'),
+      error: () => this.notify('Error deleting task', true),
     });
   }
+
+  onEdit(event: { todo: Todo; newTitle: string }): void {
+  this.todoService.updateTodo(event.todo, event.newTitle).subscribe({
+    next: () => this.notify('Task updated'),
+    error: () => this.notify('Error updating task', true),
+  });
+}
 
   private notify(msg: string, isError = false): void {
     this.snackBar.open(msg, 'OK', {
