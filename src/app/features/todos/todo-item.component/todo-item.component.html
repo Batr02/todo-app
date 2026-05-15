@@ -6,16 +6,48 @@
     color="primary"
   />
 
-  <span class="todo-title">{{ todo.title }}</span>
+ @if (isEditing) {
+    <mat-form-field appearance="outline" class="edit-field">
+      <input
+        matInput
+        [formControl]="editControl"
+        (keyup.enter)="confirmEdit()"
+        (keyup.escape)="cancelEdit()"
+        autofocus
+      />
+      @if (editControl.hasError('minlength')) {
+        <mat-error>Min 3 characters</mat-error>
+      }
+    </mat-form-field>
 
-  <button
-    mat-icon-button
-    color="warn"
-    [disabled]="loading"
-    (click)="delete.emit(todo.id)"
-    matTooltip="Удалить задачу"
-    class="delete-btn"
-  >
-    <mat-icon>delete_outline</mat-icon>
-  </button>
+    <button mat-icon-button color="primary" (click)="confirmEdit()" matTooltip="Save">
+      <mat-icon>check</mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="cancelEdit()" matTooltip="Cancel">
+      <mat-icon>close</mat-icon>
+    </button>
+  } @else {
+    <span class="todo-title">{{ todo.title }}</span>
+
+    <button
+      mat-icon-button
+      class="edit-btn"
+      (click)="startEdit()"
+      matTooltip="Edit task"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+
+    <button
+      mat-icon-button
+      color="warn"
+      [disabled]="loading"
+      (click)="delete.emit(todo.id)"
+      matTooltip="Delete task"
+      class="delete-btn"
+    >
+      <mat-icon>delete_outline</mat-icon>
+    </button>
+  }
 </div>
