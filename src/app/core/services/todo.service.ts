@@ -24,8 +24,8 @@ export class TodoService {
     };
     return this.http.post<Todo>(this.API, dto).pipe(
       tap((newTodo) => {
-        console.log('📤 Send:', dto);
-        console.log('📥 Received:', newTodo);
+        console.log('Sent:', dto);
+        console.log('Received:', newTodo);
 
         const todo = { ...newTodo, id: Date.now() }; 
         // const todo = { ...newTodo, id: Math.floor(Math.random() * 200) + 1 }; generates a random тгьиук between 1 and 200 to check if data is being updated on server.
@@ -48,8 +48,8 @@ export class TodoService {
   
     return this.http.put<Todo>(`${this.API}/${todo.id}`, updated).pipe(
       tap((response) => {
-        console.log('📤 Sent:', updated);
-        console.log('📥 Server response:', response);
+        console.log('Sent:', updated);
+        console.log('Server response:', response);
 
         const todos = this.todosSubject.getValue().map((t) =>
           t.id === todo.id ? updated : t
@@ -62,10 +62,33 @@ export class TodoService {
   deleteTodo(id: number): Observable<void> {
     return this.http.delete<void>(`${this.API}/${id}`).pipe(
       tap(() => {
-        console.log('🗑️ Deleted id:', id);
+        console.log('Deleted id:', id);
 
         const todos = this.todosSubject.getValue().filter((t) => t.id !== id);
         this.todosSubject.next(todos);
+      })
+    );
+  }
+
+  updateTodo(todo: Todo, newTitle: string): Observable<Todo> {
+    const updated = { ...todo, title: newTitle };
+
+    if (todo.id > 200) {
+      console.log('Local update (no request):', updated);
+      this.todosSubject.next(
+        this.todosSubject.getValue().map((t) => (t.id === todo.id ? updated : t))
+      );
+      return of(updated);
+    }
+
+    return this.http.put<Todo>(`${this.API}/${todo.id}`, updated).pipe(
+      tap((response) => {
+        console.log('Sent:', updated);
+        console.log('Server response:', response);
+
+        this.todosSubject.next(
+          this.todosSubject.getValue().map((t) => (t.id === todo.id ? updated : t))
+        );
       })
     );
   }
