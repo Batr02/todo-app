@@ -71,11 +71,11 @@ export class TodoService {
     );
   }
 
-  updateTodo(todo: Todo, newTitle: string): Observable<Todo> {
-    const updated = { ...todo, title: newTitle };
+  updateTodo(todo: Todo, newTitle: string, newPriority: Priority): Observable<Todo> {
+    const updated = { ...todo, title: newTitle, priority: newPriority };
 
     if (todo.id > 200) {
-      console.log('Local update (no request):', updated);
+      console.log('🔄 Local update (no request):', updated);
       this.todosSubject.next(
         this.todosSubject.getValue().map((t) => (t.id === todo.id ? updated : t))
       );
@@ -84,9 +84,8 @@ export class TodoService {
 
     return this.http.put<Todo>(`${this.API}/${todo.id}`, updated).pipe(
       tap((response) => {
-        console.log('Sent:', updated);
-        console.log('Server response:', response);
-
+        console.log('📤 Sent:', updated);
+        console.log('📥 Server response:', response);
         this.todosSubject.next(
           this.todosSubject.getValue().map((t) => (t.id === todo.id ? updated : t))
         );
