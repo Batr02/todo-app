@@ -15,7 +15,7 @@ import { MatInputModule } from '@angular/material/input';
     MatIconModule,
   ],
   templateUrl: './todo-form.component.html',
-  styleUrl: './todo-form.scss',
+  styleUrl: './todo-form.component.scss',
 })
 export class TodoFormComponent {
   @Output() addTodo = new EventEmitter<string>();
