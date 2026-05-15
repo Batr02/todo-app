@@ -28,7 +28,7 @@ export class TodoService {
         console.log('Received:', newTodo);
 
         const todo = { ...newTodo, id: Date.now() }; 
-        // const todo = { ...newTodo, id: Math.floor(Math.random() * 200) + 1 }; generates a random тгьиук between 1 and 200 to check if data is being updated on server.
+        // const todo = { ...newTodo, id: Math.floor(Math.random() * 200) + 1 }; generates a random number between 1 and 200 to check if data is being updated on server.
         const current = this.todosSubject.getValue();
         this.todosSubject.next([todo, ...current]);
       })
