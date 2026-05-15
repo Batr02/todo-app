@@ -1,25 +1,37 @@
 <div class="todo-form">
   <mat-form-field appearance="outline" class="todo-input">
     <mat-label>New task</mat-label>
-    <input
+     <input
       matInput
-      [formControl]="titleControl"
+      [formControl]="form.controls.title"
       placeholder="What needs to be done?"
       (keyup.enter)="submit()"
     />
-    <mat-hint>Press Enter or click the button to add</mat-hint>
-    @if (titleControl.hasError('minlength')) {
-      <mat-error>Minimum 3 characters</mat-error>
+    <mat-hint>Press Enter or button to add</mat-hint>
+    @if (form.controls.title.hasError('minlength')) {
+      <mat-error>Min 3 characters</mat-error>
     }
-    @if (titleControl.hasError('maxlength')) {
-      <mat-error>Maximum 100 characters</mat-error>
+    @if (form.controls.title.hasError('maxlength')) {
+      <mat-error>Max 100 characters</mat-error>
     }
+  </mat-form-field>
+
+   <mat-form-field appearance="outline" class="priority-select">
+    <mat-label>Priority</mat-label>
+    <mat-select [formControl]="form.controls.priority">
+      @for (p of priorities; track p.value) {
+        <mat-option [value]="p.value">
+          <mat-icon class="priority-icon priority-{{ p.value }}">{{ p.icon }}</mat-icon>
+          {{ p.label }}
+        </mat-option>
+      }
+    </mat-select>
   </mat-form-field>
 
   <button
     mat-fab
     color="primary"
-    [disabled]="titleControl.invalid"
+    [disabled]="form.invalid"
     (click)="submit()"
     aria-label="Add task"
   >

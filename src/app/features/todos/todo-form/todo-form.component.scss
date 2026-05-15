@@ -8,3 +8,17 @@
 .todo-input {
   flex: 1;
 }
+
+.priority-select {
+  width: 130px;
+}
+
+.priority-icon {
+  vertical-align: middle;
+  font-size: 18px;
+  margin-right: 4px;
+}
+
+.priority-high   { color: #e53935; }
+.priority-medium { color: #fb8c00; }
+.priority-low    { color: #43a047; }
