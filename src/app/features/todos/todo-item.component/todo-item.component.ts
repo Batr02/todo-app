@@ -6,7 +6,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Todo } from '../../../models/todo.model';
 
 @Component({
-  selector: 'app-todo-item.component',
+  selector: 'app-todo-item',
   imports: [
     MatCheckboxModule,
     MatButtonModule,
