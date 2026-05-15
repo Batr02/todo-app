@@ -40,6 +40,10 @@
   transition: opacity 0.2s;
 }
 
+.edit-priority {
+  width: 130px;
+}
+
 .todo-item:hover .edit-btn,
 .todo-item:hover .delete-btn {
   opacity: 1;

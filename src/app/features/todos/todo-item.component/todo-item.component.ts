@@ -7,6 +7,7 @@ import { Priority, Todo } from '../../../models/todo.model';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from "@angular/material/select";
 
 @Component({
   selector: 'app-todo-item',
@@ -18,7 +19,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatInputModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-  ],
+    MatSelectModule
+],
   templateUrl: './todo-item.component.html',
   styleUrl: './todo-item.component.scss',
 })
@@ -27,7 +29,13 @@ export class TodoItemComponent {
   @Input() loading = false;
   @Output() toggle = new EventEmitter<Todo>();
   @Output() delete = new EventEmitter<number>();
-  @Output() edit = new EventEmitter<{ todo: Todo; newTitle: string }>();
+  @Output() edit = new EventEmitter<{ todo: Todo; newTitle: string; newPriority: Priority }>();
+
+   readonly priorities: { value: Priority; label: string; icon: string }[] = [
+    { value: 'high',   label: 'High',   icon: 'keyboard_double_arrow_up'   },
+    { value: 'medium', label: 'Medium', icon: 'drag_handle'                },
+    { value: 'low',    label: 'Low',    icon: 'keyboard_double_arrow_down' },
+  ];
 
   readonly priorityConfig: Record<Priority, { icon: string; class: string; label: string }> = {
   high:   { icon: 'keyboard_double_arrow_up',   class: 'priority-high',   label: 'High'   },
@@ -36,27 +44,38 @@ export class TodoItemComponent {
 };
 
   isEditing = false;
+
   editControl = new FormControl('', [
     Validators.required,
     Validators.minLength(3),
     Validators.maxLength(100),
   ]);
 
+  priorityControl = new FormControl<Priority>('medium', {
+    nonNullable: true,
+    validators: Validators.required,
+  });
+
   startEdit(): void {
     this.isEditing = true;
     this.editControl.setValue(this.todo.title);
+    this.priorityControl.setValue(this.todo.priority);
   }
 
   cancelEdit(): void {
     this.isEditing = false;
     this.editControl.reset();
+    this.priorityControl.reset();
   }
 
   confirmEdit(): void {
     if (this.editControl.valid && this.editControl.value) {
-      this.edit.emit({ todo: this.todo, newTitle: this.editControl.value.trim() });
+      this.edit.emit({
+        todo: this.todo,
+        newTitle: this.editControl.value.trim(),
+        newPriority: this.priorityControl.value,
+      });
       this.isEditing = false;
     }
   }
-
 }

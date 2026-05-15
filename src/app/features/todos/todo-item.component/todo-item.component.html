@@ -20,6 +20,18 @@
       }
     </mat-form-field>
 
+     <mat-form-field appearance="outline" class="edit-priority">
+      <mat-label>Priority</mat-label>
+      <mat-select [formControl]="priorityControl">
+        @for (p of priorities; track p.value) {
+          <mat-option [value]="p.value">
+            <mat-icon class="priority-icon priority-{{ p.value }}">{{ p.icon }}</mat-icon>
+            {{ p.label }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
     <button mat-icon-button color="primary" (click)="confirmEdit()" matTooltip="Save">
       <mat-icon>check</mat-icon>
     </button>
