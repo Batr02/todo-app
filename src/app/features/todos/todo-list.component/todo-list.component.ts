@@ -11,7 +11,7 @@ import { TodoFilter, Todo } from '../../../models/todo.model';
 import { TodoItemComponent } from '../todo-item.component/todo-item.component';
 
 @Component({
-  selector: 'app-todo-list.component',
+  selector: 'app-todo-list',
   imports: [
     AsyncPipe,
     TodoFormComponent,
