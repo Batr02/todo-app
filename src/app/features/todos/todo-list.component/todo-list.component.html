@@ -14,9 +14,28 @@
       <mat-button-toggle value="completed">Completed</mat-button-toggle>
     </mat-button-toggle-group>
 
-    @if (stats$ | async; as stats) {
-      <span class="stats">{{ stats.active }} of {{ stats.total }} active</span>
-    }
+      <mat-button-toggle-group
+        [value]="sort$ | async"
+        (change)="setSort($event.value)"
+        aria-label="Sort by priority"
+      >
+    <mat-button-toggle value="none">
+      <mat-icon>sort</mat-icon>
+      Default
+    </mat-button-toggle>
+    <mat-button-toggle value="desc">
+      <mat-icon>keyboard_double_arrow_up</mat-icon>
+      High first
+    </mat-button-toggle>
+    <mat-button-toggle value="asc">
+      <mat-icon>keyboard_double_arrow_down</mat-icon>
+      Low first
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+      @if (stats$ | async; as stats) {
+        <span class="stats">{{ stats.active }} of {{ stats.total }} active</span>
+      }
   </div>
 
   @if (todos.length === 0) {
@@ -27,7 +46,7 @@
         [todo]="todo"
         (toggle)="onToggle($event)"
         (delete)="onDelete($event)"
-         (edit)="onEdit($event)"
+        (edit)="onEdit($event)"
       />
       <mat-divider />
     }
