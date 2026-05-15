@@ -90,8 +90,8 @@ export class TodoListComponent {
     });
   }
 
-  onEdit(event: { todo: Todo; newTitle: string }): void {
-    this.todoService.updateTodo(event.todo, event.newTitle).subscribe({
+  onEdit(event: { todo: Todo; newTitle: string; newPriority: Priority }): void {
+    this.todoService.updateTodo(event.todo, event.newTitle, event.newPriority).subscribe({
       next: () => this.notify('✏️ Task updated'),
       error: () => this.notify('❌ Error updating task', true),
     });
