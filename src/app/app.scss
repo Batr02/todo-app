@@ -1,0 +1,22 @@
+.toolbar-title {
+  margin-left: 8px;
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.main-content {
+  max-width: 680px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+.todo-card {
+  padding: 8px;
+}
+
+mat-card-content {
+  margin-top: 16px;
+}
