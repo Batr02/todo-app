@@ -2,10 +2,9 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { combineLatest, map } from 'rxjs';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { TodoService } from '../../../core/services/todo.service';
 import { TodoFilter, Todo } from '../../../models/todo.model';
 import { TodoItemComponent } from '../todo-item.component/todo-item.component';
@@ -15,7 +14,6 @@ import { TodoItemComponent } from '../todo-item.component/todo-item.component';
   imports: [
     AsyncPipe,
     TodoFormComponent,
-    MatProgressSpinnerModule,
     MatButtonToggleModule,
     MatDividerModule,
     TodoItemComponent
@@ -27,11 +25,18 @@ export class TodoListComponent {
   private todoService = inject(TodoService);
   private snackBar = inject(MatSnackBar);
 
-  loading$ = this.todoService.loading$;
-  filter: TodoFilter = 'all';
+  private filterSubject = new BehaviorSubject<TodoFilter>('all');
+  filter$ = this.filterSubject.asObservable();
 
-  filteredTodos$ = combineLatest([this.todoService.todos$]).pipe(
-    map(([todos]) => this.applyFilter(todos))
+  filteredTodos$ = combineLatest([
+    this.todoService.todos$,
+    this.filter$,
+  ]).pipe(
+    map(([todos, filter]) => {
+      if (filter === 'active') return todos.filter((t) => !t.completed);
+      if (filter === 'completed') return todos.filter((t) => t.completed);
+      return todos;
+    })
   );
 
   stats$ = this.todoService.todos$.pipe(
@@ -41,8 +46,8 @@ export class TodoListComponent {
     }))
   );
 
-  ngOnInit(): void {
-    this.todoService.loadTodos();
+  setFilter(filter: TodoFilter): void {
+    this.filterSubject.next(filter);
   }
 
   onAdd(title: string): void {
@@ -63,12 +68,6 @@ export class TodoListComponent {
       next: () => this.notify('🗑️ Task deleted'),
       error: () => this.notify('❌ Error deleting task', true),
     });
-  }
-
-  private applyFilter(todos: Todo[]): Todo[] {
-    if (this.filter === 'active') return todos.filter((t) => !t.completed);
-    if (this.filter === 'completed') return todos.filter((t) => t.completed);
-    return todos;
   }
 
   private notify(msg: string, isError = false): void {

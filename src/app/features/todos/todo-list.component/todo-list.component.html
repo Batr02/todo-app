@@ -1,16 +1,12 @@
-@if (loading$ | async) {
-  <div class="spinner-wrap">
-    <mat-spinner diameter="48" />
-  </div>
-} @else {
+@if (filteredTodos$ | async; as todos) {
   <app-todo-form (addTodo)="onAdd($event)" />
 
   <mat-divider class="divider" />
 
   <div class="filters">
     <mat-button-toggle-group
-      [value]="filter"
-      (change)="filter = $event.value"
+      [value]="filter$ | async"
+      (change)="setFilter($event.value)"
       aria-label="Task Filter"
     >
       <mat-button-toggle value="all">All</mat-button-toggle>
@@ -23,18 +19,16 @@
     }
   </div>
 
-  @if (filteredTodos$ | async; as todos) {
-    @if (todos.length === 0) {
-      <p class="empty-state">No tasks. Add the first one!</p>
-    } @else {
-      @for (todo of todos; track todo.id) {
-        <app-todo-item
-          [todo]="todo"
-          (toggle)="onToggle($event)"
-          (delete)="onDelete($event)"
-        />
-        <mat-divider />
-      }
+  @if (todos.length === 0) {
+    <p class="empty-state">No tasks. Add the first one!</p>
+  } @else {
+    @for (todo of todos; track todo.id) {
+      <app-todo-item
+        [todo]="todo"
+        (toggle)="onToggle($event)"
+        (delete)="onDelete($event)"
+      />
+      <mat-divider />
     }
   }
 }
