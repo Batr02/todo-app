@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Todo } from '../../../models/todo.model';
+import { Priority, Todo } from '../../../models/todo.model';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,6 +28,12 @@ export class TodoItemComponent {
   @Output() toggle = new EventEmitter<Todo>();
   @Output() delete = new EventEmitter<number>();
   @Output() edit = new EventEmitter<{ todo: Todo; newTitle: string }>();
+
+  readonly priorityConfig: Record<Priority, { icon: string; class: string; label: string }> = {
+  high:   { icon: 'keyboard_double_arrow_up',   class: 'priority-high',   label: 'High'   },
+  medium: { icon: 'drag_handle',                class: 'priority-medium', label: 'Medium' },
+  low:    { icon: 'keyboard_double_arrow_down', class: 'priority-low',    label: 'Low'    },
+};
 
   isEditing = false;
   editControl = new FormControl('', [
