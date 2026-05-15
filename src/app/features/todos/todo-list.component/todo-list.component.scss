@@ -1,0 +1,30 @@
+.spinner-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 48px;
+}
+
+.divider {
+  margin: 16px 0;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.stats {
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px;
+  opacity: 0.5;
+  font-size: 16px;
+}

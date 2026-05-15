@@ -1,1 +1,40 @@
-<p>todo-list.component works!</p>
+@if (loading$ | async) {
+  <div class="spinner-wrap">
+    <mat-spinner diameter="48" />
+  </div>
+} @else {
+  <app-todo-form (addTodo)="onAdd($event)" />
+
+  <mat-divider class="divider" />
+
+  <div class="filters">
+    <mat-button-toggle-group
+      [value]="filter"
+      (change)="filter = $event.value"
+      aria-label="Task Filter"
+    >
+      <mat-button-toggle value="all">All</mat-button-toggle>
+      <mat-button-toggle value="active">Active</mat-button-toggle>
+      <mat-button-toggle value="completed">Completed</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    @if (stats$ | async; as stats) {
+      <span class="stats">{{ stats.active }} of {{ stats.total }} active</span>
+    }
+  </div>
+
+  @if (filteredTodos$ | async; as todos) {
+    @if (todos.length === 0) {
+      <p class="empty-state">No tasks. Add the first one!</p>
+    } @else {
+      @for (todo of todos; track todo.id) {
+        <app-todo-item
+          [todo]="todo"
+          (toggle)="onToggle($event)"
+          (delete)="onDelete($event)"
+        />
+        <mat-divider />
+      }
+    }
+  }
+}
