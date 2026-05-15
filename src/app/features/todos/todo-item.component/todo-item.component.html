@@ -31,7 +31,7 @@
       class="priority-badge {{ (priorityConfig && priorityConfig[todo.priority]) ? priorityConfig[todo.priority].class : '' }}"
       [matTooltip]="'Priority: ' + ((priorityConfig && priorityConfig[todo.priority]) ? priorityConfig[todo.priority].label : '')"
     >
-      {{ (priorityConfig && priorityConfig[todo.priority]) ? priorityConfig[todo.priority].icon : '' }}
+      {{ priorityConfig[todo.priority].icon }}
     </mat-icon>
 
     <span class="todo-title">{{ todo.title }}</span>
