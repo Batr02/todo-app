@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
-import { CreateTodoDto, Todo } from '../../models/todo.model';
+import { CreateTodoDto, Priority, Todo } from '../../models/todo.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,11 +16,12 @@ export class TodoService {
   private todosSubject = new BehaviorSubject<Todo[]>([]);
   todos$ = this.todosSubject.asObservable();
 
-  addTodo(title: string): Observable<Todo> { 
+  addTodo(title: string, priority: Priority): Observable<Todo> { 
     const dto: CreateTodoDto = {
       title,
       completed: false,
       userId: this.USER_ID,
+      priority,
     };
     return this.http.post<Todo>(this.API, dto).pipe(
       tap((newTodo) => {
