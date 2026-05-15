@@ -5,14 +5,14 @@ export interface Todo {
   title: string;
   completed: boolean;
   userId: number;
-  priority?: Priority;
+  priority: Priority;
 }
 
 export interface CreateTodoDto {
   title: string;
   completed: boolean;
   userId: number;
-  priority?: Priority;
+  priority: Priority;
 }
 
 export type TodoFilter = 'all' | 'active' | 'completed';
