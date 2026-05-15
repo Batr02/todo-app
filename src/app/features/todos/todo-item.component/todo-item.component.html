@@ -1,12 +1,12 @@
 <div class="todo-item" [class.completed]="todo.completed">
   <mat-checkbox
     [checked]="todo.completed"
-    [disabled]="loading"
+    [disabled]="loading || isEditing"
     (change)="toggle.emit(todo)"
     color="primary"
   />
 
- @if (isEditing) {
+  @if (isEditing) {
     <mat-form-field appearance="outline" class="edit-field">
       <input
         matInput
@@ -23,22 +23,22 @@
     <button mat-icon-button color="primary" (click)="confirmEdit()" matTooltip="Save">
       <mat-icon>check</mat-icon>
     </button>
-
     <button mat-icon-button (click)="cancelEdit()" matTooltip="Cancel">
       <mat-icon>close</mat-icon>
     </button>
   } @else {
+    <mat-icon
+      class="priority-badge {{ (priorityConfig && priorityConfig[todo.priority]) ? priorityConfig[todo.priority].class : '' }}"
+      [matTooltip]="'Priority: ' + ((priorityConfig && priorityConfig[todo.priority]) ? priorityConfig[todo.priority].label : '')"
+    >
+      {{ (priorityConfig && priorityConfig[todo.priority]) ? priorityConfig[todo.priority].icon : '' }}
+    </mat-icon>
+
     <span class="todo-title">{{ todo.title }}</span>
 
-    <button
-      mat-icon-button
-      class="edit-btn"
-      (click)="startEdit()"
-      matTooltip="Edit task"
-    >
+    <button mat-icon-button class="edit-btn" (click)="startEdit()" matTooltip="Edit task">
       <mat-icon>edit</mat-icon>
     </button>
-
     <button
       mat-icon-button
       color="warn"
